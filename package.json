@@ -1,9 +1,9 @@
 {
-  "name": "raytracer",
-  "version": "1.0.0",
-  "description": "",
+  "name": "raytracer.ts",
+  "version": "0.0.1",
+  "description": "Typescript CPU based raymarcher",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "typings": "dist/src/index.d.ts",
   "files": [
     "./dist/"
   ],
