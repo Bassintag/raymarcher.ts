@@ -1,4 +1,5 @@
 import {IMatrix4} from '../matrix/matrix4';
+import {Maths} from '../maths';
 
 export interface IVector3 {
 
@@ -40,11 +41,27 @@ export namespace Vector3 {
         );
     }
 
+    export function add1(a: IVector3, b: number): IVector3 {
+        return new Vector3(
+            a.x + b,
+            a.y + b,
+            a.z + b,
+        );
+    }
+
     export function substract(a: IVector3, b: IVector3): IVector3 {
         return new Vector3(
             a.x - b.x,
             a.y - b.y,
             a.z - b.z,
+        );
+    }
+
+    export function substract1(a: IVector3, n: number): IVector3 {
+        return new Vector3(
+            a.x - n,
+            a.y - n,
+            a.z - n,
         );
     }
 
@@ -61,6 +78,23 @@ export namespace Vector3 {
             a.x / b.x,
             a.y / b.y,
             a.z / b.z,
+        );
+    }
+
+    export function modulo(a: IVector3, b: IVector3): IVector3 {
+        return new Vector3(
+            Maths.mod(a.x, b.x),
+            Maths.mod(a.y, b.y),
+            Maths.mod(a.z, b.z),
+        );
+    }
+
+
+    export function absolute(v: IVector3): IVector3 {
+        return new Vector3(
+            Math.abs(v.x),
+            Math.abs(v.y),
+            Math.abs(v.z),
         );
     }
 

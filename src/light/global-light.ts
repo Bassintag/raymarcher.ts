@@ -3,6 +3,8 @@ import {IColor, IVector3} from '../utils';
 
 export class GlobalLight implements ILight {
 
+    readonly skipNormals: boolean = true;
+
     constructor(
         private readonly color: IColor
     ) {

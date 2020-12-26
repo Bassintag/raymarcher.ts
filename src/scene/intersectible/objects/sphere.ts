@@ -1,15 +1,17 @@
-import {IIntersectible} from '../intersectible';
 import {IVector3, Vector3} from '../../../utils/vector';
+import {SceneObject} from './scene-object';
+import {IMaterial} from '../../../material';
 
-export class Sphere implements IIntersectible {
+export class Sphere extends SceneObject {
 
     private readonly radius: number;
 
-    constructor(radius: number) {
+    constructor(material: IMaterial, radius: number = .5) {
+        super(material);
         this.radius = radius;
     }
 
-    distance(position: IVector3): number {
+    getDistance(position: IVector3): number {
         return Vector3.norm(position) - this.radius;
     }
 }

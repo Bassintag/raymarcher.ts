@@ -1,12 +1,12 @@
 import {IVector3, Vector3} from '../utils/vector';
 import {ILimitations} from './limitations';
-import {IIntersectible} from '../scene/intersectible';
+import {IIntersectible, IIntersection} from '../scene/intersectible';
 
 
 export interface IRayHit {
     readonly hit: boolean;
     readonly totalDistance: number;
-    readonly distance: number;
+    readonly intersection: IIntersection;
     readonly position: IVector3;
     readonly occlusion: number;
 }
@@ -50,27 +50,27 @@ export class Ray implements IRay {
 
     march(intersectible: IIntersectible): IRayHit {
         let position = this.origin;
-        let distance = this.limitations.epsilon;
+        let intersection: IIntersection = {distance: this.limitations.epsilon, material: null};
         let totalDistance = 0;
         let occlusion = 1;
         let hit = false;
         for (let i = 0; i < this.limitations.maxIterations; i += 1) {
-            distance = intersectible.distance(position);
-            if (distance < this.limitations.epsilon) {
+            intersection = intersectible.distance(position);
+            if (intersection.distance < this.limitations.epsilon) {
                 hit = true;
                 break;
             }
-            totalDistance += distance;
+            totalDistance += intersection.distance;
             if (totalDistance >= this.limitations.far) {
                 totalDistance = this.limitations.far;
                 break;
             }
-            occlusion = Math.min(occlusion, distance * this.occlusionFactor / totalDistance);
-            position = Vector3.add(position, Vector3.scale(this.direction, distance));
+            occlusion = Math.min(occlusion, intersection.distance * this.occlusionFactor / totalDistance);
+            position = Vector3.add(position, Vector3.scale(this.direction, intersection.distance));
         }
         return {
             hit,
-            distance,
+            intersection,
             position,
             totalDistance,
             occlusion,

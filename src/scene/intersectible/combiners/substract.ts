@@ -1,4 +1,4 @@
-import {IIntersectible} from '../intersectible';
+import {IIntersectible, IIntersection, Intersection} from '../intersectible';
 import {IVector3} from '../../../utils/vector';
 
 export class Substract implements IIntersectible {
@@ -8,10 +8,11 @@ export class Substract implements IIntersectible {
     ) {
     }
 
-    distance(position: IVector3): number {
-        return Math.max(
+    distance(position: IVector3): IIntersection {
+        const b = this.b.distance(position);
+        return Intersection.max(
             this.a.distance(position),
-            -this.b.distance(position),
+            {distance: -b.distance, material: b.material},
         );
     }
 }

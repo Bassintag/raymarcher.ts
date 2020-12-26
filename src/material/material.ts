@@ -1,17 +1,12 @@
-import {Color, IColor} from '../utils';
+import {IColor, IVector3} from '../utils';
+
+export interface IMaterialOutput {
+    color: IColor;
+    smoothness?: number;
+    roughness?: number
+}
 
 export interface IMaterial {
 
-    readonly color: IColor;
-}
-
-export class Material implements IMaterial {
-
-    readonly color: IColor;
-
-    constructor(
-        color: IColor = Color.WHITE,
-    ) {
-        this.color = color;
-    }
+    render(position: IVector3, normal: IVector3): IMaterialOutput;
 }

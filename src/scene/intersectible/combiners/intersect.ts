@@ -1,4 +1,4 @@
-import {IIntersectible} from '../intersectible';
+import {IIntersectible, IIntersection, Intersection} from '../intersectible';
 import {IVector3} from '../../../utils/vector';
 
 export class Intersect implements IIntersectible {
@@ -10,8 +10,8 @@ export class Intersect implements IIntersectible {
         this.intersectibles = intersectibles;
     }
 
-    distance(position: IVector3): number {
-        return Math.max(
+    distance(position: IVector3): IIntersection {
+        return Intersection.max(
             ...this.intersectibles.map((i) => i.distance(position))
         );
     }

@@ -9,11 +9,11 @@ export interface IVector3Data {
 
 export class Vector3Deserializer implements IDeserializer<IVector3> {
 
-    deserialize(data: IVector3Data): IVector3 {
-        return new Vector3(
-            data.x || 1,
-            data.y || 1,
-            data.z || 1,
-        );
+    deserialize({
+                    x = 1,
+                    y = 1,
+                    z = 1,
+                }: IVector3Data): IVector3 {
+        return new Vector3(x, y, z);
     }
 }

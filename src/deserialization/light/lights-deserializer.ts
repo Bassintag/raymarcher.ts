@@ -16,7 +16,7 @@ export class LightsDeserializer implements IDeserializer<ILight[]> {
     constructor(
         private readonly scene: IIntersectible,
         private readonly limitations: ILimitations = Limitations.DEFAULT,
-        deserializers: { readonly [key: string]: ILightDeserializer }
+        deserializers: { readonly [key: string]: ILightDeserializer } = null,
     ) {
         if (deserializers == null) {
             deserializers = {

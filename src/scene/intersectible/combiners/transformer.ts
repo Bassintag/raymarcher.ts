@@ -1,4 +1,4 @@
-import {IIntersectible} from '../intersectible';
+import {IIntersectible, IIntersection} from '../intersectible';
 import {IVector3, Vector3} from '../../../utils/vector';
 import {IMatrix4, Matrix4} from '../../../utils/matrix/matrix4';
 import {ITransform, Transform} from '../../../utils';
@@ -15,9 +15,7 @@ export class Transformer implements IIntersectible {
         this.transform = transform;
     }
 
-    distance(position: IVector3): number {
-        return this.intersectible.distance(
-            Vector3.transform(position, this.transform.invertMatrix),
-        );
+    distance(position: IVector3): IIntersection {
+        return this.intersectible.distance(Vector3.transform(position, this.transform.invertMatrix));
     }
 }

@@ -1,15 +1,17 @@
-import {IIntersectible} from '../intersectible';
 import {IVector3, Vector3} from '../../../utils/vector';
+import {IMaterial} from '../../../material';
+import {SceneObject} from './scene-object';
 
-export class Cube implements IIntersectible {
+export class Cube extends SceneObject {
 
     private readonly size: Vector3;
 
-    constructor(size: IVector3 = Vector3.ONE) {
+    constructor(material: IMaterial, size: IVector3 = Vector3.ONE) {
+        super(material);
         this.size = size;
     }
 
-    distance(position: IVector3): number {
+    getDistance(position: IVector3): number {
         return Vector3.norm(
             Vector3.max1(
                 Vector3.substract(
