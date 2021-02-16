@@ -1,4 +1,4 @@
-import {IVector3, Transform} from '../../utils';
+import {IVector3, Maths, Transform, Vector3} from '../../utils';
 import {IDeserializer, IIntersectibleDeserializer} from '../deserializer';
 import {IIntersectible, Transformer} from '../../scene/intersectible';
 import {IVector3Data, Vector3Deserializer} from '../vector3-deserializer';
@@ -25,7 +25,10 @@ export class TransformerDeserializer implements IIntersectibleDeserializer {
     deserialize(data: ITransformerData): IIntersectible {
         const transform = new Transform(
             this.vector3Deserializer.deserialize(data.position || {x: 0, y: 0, z: 0}),
-            this.vector3Deserializer.deserialize(data.rotation || {x: 0, y: 0, z: 0}),
+            Vector3.scale(
+                this.vector3Deserializer.deserialize(data.rotation || {x: 0, y: 0, z: 0}),
+                Maths.DEG2RAD,
+            ),
             this.vector3Deserializer.deserialize(data.scale || {x: 1, y: 1, z: 1}),
         );
         return new Transformer(

@@ -23,6 +23,24 @@ export namespace Color {
         ];
     }
 
+    export function clamp(color: IColor): IColor {
+        return [
+            Maths.clamp(color[0], 0, 1),
+            Maths.clamp(color[1], 0, 1),
+            Maths.clamp(color[2], 0, 1),
+            color[3],
+        ];
+    }
+
+    export function pow(color: IColor, factor: number): IColor {
+        return [
+            Math.pow(color[0], factor),
+            Math.pow(color[1], factor),
+            Math.pow(color[2], factor),
+            color[3],
+        ];
+    }
+
     export function additiveBlend(colors: IColor[]): IColor {
         const mixed = colors.reduce((prev, c) => [
             prev[0] + c[0] * c[3],
@@ -38,13 +56,22 @@ export namespace Color {
         ];
     }
 
-    export function minBlend(colors: IColor[]): IColor {
+    export function multiplyBlend(colors: IColor[]): IColor {
         return colors.reduce((prev, c) => [
             prev[0] * c[0] * c[3],
             prev[1] * c[1] * c[3],
             prev[2] * c[2] * c[3],
             1
         ], Color.WHITE);
+    }
+
+    export function maxBlend(colors: IColor[]): IColor {
+        return colors.reduce((prev, c) => [
+            Math.max(prev[0], c[0] * c[3]),
+            Math.max(prev[1], c[1] * c[3]),
+            Math.max(prev[2], c[2] * c[3]),
+            1
+        ], Color.BLACK);
     }
 
     export function lerp(a: IColor, b: IColor, h: number): IColor {

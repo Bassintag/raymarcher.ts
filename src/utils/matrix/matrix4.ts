@@ -84,4 +84,31 @@ export namespace Matrix4 {
             det * (m[0][0] * a1212 - m[0][1] * a0212 + m[0][2] * a0112)
         ]];
     }
+
+    export function rotationX(t: number): IMatrix4 {
+        return [
+            [1, 0, 0, 0],
+            [0, Math.cos(t), -Math.sin(t), 0],
+            [0, Math.sin(t), Math.cos(t), 0],
+            [0, 0, 0, 1],
+        ];
+    }
+
+    export function rotationY(t: number): IMatrix4 {
+        return [
+            [Math.cos(t), 0, Math.sin(t), 0],
+            [0, 1, 0, 0],
+            [-Math.sin(t), 0, Math.cos(t), 0],
+            [0, 0, 0, 1],
+        ];
+    }
+
+    export function rotationZ(t: number): IMatrix4 {
+        return [
+            [Math.cos(t), -Math.sin(t), 0, 0],
+            [Math.sin(t), Math.cos(t), 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
+        ];
+    }
 }

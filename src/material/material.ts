@@ -4,6 +4,8 @@ export interface IMaterialOutput {
     color: IColor;
     smoothness?: number;
     roughness?: number
+    specularFactor?: number;
+    specularSpread?: number;
 }
 
 export interface IMaterial {

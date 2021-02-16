@@ -135,6 +135,14 @@ export namespace Vector3 {
         );
     }
 
+    export function min1(v: IVector3, n: number): IVector3 {
+        return new Vector3(
+            Math.min(v.x, n),
+            Math.min(v.y, n),
+            Math.min(v.z, n),
+        );
+    }
+
     export function max1(v: IVector3, n: number): IVector3 {
         return new Vector3(
             Math.max(v.x, n),

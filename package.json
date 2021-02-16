@@ -1,11 +1,12 @@
 {
-  "name": "raytracer.ts",
-  "version": "0.0.1",
+  "name": "raymarcher.ts",
+  "version": "0.0.3",
   "description": "Typescript CPU based raymarcher",
+  "repository": "https://github.com/Bassintag/raymarcher.ts",
   "main": "dist/index.js",
   "typings": "dist/src/index.d.ts",
   "files": [
-    "./dist/"
+    "dist/**/*"
   ],
   "scripts": {
     "watch": "webpack --watch",

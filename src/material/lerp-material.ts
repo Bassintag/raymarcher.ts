@@ -16,6 +16,7 @@ export class LerpMaterial implements IMaterial {
         return {
             color: Color.lerp(a.color, b.color, this.h),
             smoothness: Maths.lerp(a.smoothness, b.smoothness, this.h),
+            roughness: Maths.lerp(a.roughness, b.roughness, this.h),
         };
     }
 }

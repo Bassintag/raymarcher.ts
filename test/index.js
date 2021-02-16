@@ -1,5 +1,5 @@
-const WIDTH = 1920 / 2;
-const HEIGHT = 1080 / 2;
+const WIDTH = 1920;
+const HEIGHT = 1080;
 
 /*const sceneData = {
     type: 'smooth-combine',
@@ -91,27 +91,43 @@ const resolution = {
 
 const sceneData = {
     scene: {
-        type: 'mandel',
-        material: {
-            type: 'normal',
-        }
+        type: 'sphere',
+        size: {x: .5, y: .5, z: .5},
+        radius: .5,
+        width: .2,
+        material: 'mirror',
     },
     lights: [{
         type: 'point',
-        position: {
-            x: 2,
-            y: 1,
-            z: 2,
-        },
-        color: raymarcher.Color.WHITE,
-        radius: 1000,
-    }, {
-        type: 'global',
-        color: [1, 1, 1, .1]
+        position: {x: 1, y: 1, z: 0},
+        radius: 100,
+        color: [1, 1, 1, 1]
     }],
+    materials: {
+        'normal': {
+            type: 'normal',
+        },
+        'mirror': {
+            type: 'color',
+            color: [1, 0, 0, 1],
+            smoothness: 0,
+            roughness: 0.0,
+        },
+        'checkerboard': {
+            type: 'checkerboard',
+            left: [0, 0, 0, 1],
+            right: [1, 1, 1, 1],
+        },
+    },
     resolution,
+    limitations: {
+        epsilon: 0.0001,
+        far: 3,
+        maxIterations: 10000,
+        descentFactor: 1,
+    },
     camera: {
-        position: {x: .8, y: .8, z: 1.6},
+        position: {x: 1, y: 0, z: 1},
         target: {x: 0, y: 0, z: 0},
     },
 };

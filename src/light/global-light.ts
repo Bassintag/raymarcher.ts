@@ -1,16 +1,20 @@
-import {ILight} from './light';
-import {IColor, IVector3} from '../utils';
+import {IIllumination, ILight} from './light';
+import {Color, IColor} from '../utils';
 
 export class GlobalLight implements ILight {
 
-    readonly skipNormals: boolean = true;
+    private readonly illumination: IIllumination;
 
     constructor(
         private readonly color: IColor
     ) {
+        this.illumination = {
+            diffuse: color,
+            specular: Color.BLACK,
+        };
     }
 
-    getIllumination(point: IVector3): IColor {
-        return this.color;
+    getIllumination(): IIllumination {
+        return this.illumination;
     }
 }

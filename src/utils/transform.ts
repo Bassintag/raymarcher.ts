@@ -26,12 +26,16 @@ export class Transform implements ITransform {
         this.position = position;
         this.rotation = rotation;
         this.scale = scale;
-        this.matrix = [
+        let matrix: IMatrix4 = [
             [scale.x, 0, 0, position.x],
             [0, scale.y, 0, position.y],
             [0, 0, scale.z, position.z],
             [0, 0, 0, 1],
         ];
+        matrix = Matrix4.multiply(matrix, Matrix4.rotationX(rotation.x));
+        matrix = Matrix4.multiply(matrix, Matrix4.rotationY(rotation.y));
+        matrix = Matrix4.multiply(matrix, Matrix4.rotationZ(rotation.z));
+        this.matrix = matrix;
         this.invertMatrix = Matrix4.invert(this.matrix);
     }
 }

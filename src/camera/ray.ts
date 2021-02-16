@@ -54,20 +54,22 @@ export class Ray implements IRay {
         let totalDistance = 0;
         let occlusion = 1;
         let hit = false;
-        for (let i = 0; i < this.limitations.maxIterations; i += 1) {
+        let i: number;
+        for (i = 0; i < this.limitations.maxIterations; i += 1) {
             intersection = intersectible.distance(position);
-            if (intersection.distance < this.limitations.epsilon) {
+            totalDistance += intersection.distance / this.limitations.descentFactor;
+            position = Vector3.add(this.origin, Vector3.scale(this.direction, totalDistance));
+            occlusion = Math.min(occlusion, Math.abs(intersection.distance * this.occlusionFactor / totalDistance));
+            if (Math.abs(intersection.distance) <= this.limitations.epsilon) {
                 hit = true;
                 break;
             }
-            totalDistance += intersection.distance;
             if (totalDistance >= this.limitations.far) {
                 totalDistance = this.limitations.far;
                 break;
             }
-            occlusion = Math.min(occlusion, intersection.distance * this.occlusionFactor / totalDistance);
-            position = Vector3.add(position, Vector3.scale(this.direction, intersection.distance));
         }
+        position = Vector3.add(this.origin, Vector3.scale(this.direction, totalDistance));
         return {
             hit,
             intersection,

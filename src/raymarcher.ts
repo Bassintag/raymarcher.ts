@@ -8,6 +8,7 @@ import {GlobalLight} from './light/global-light';
 export interface IRaymarcherOptions {
     epsilon?: number;
     maxIterations?: number;
+    descentFactor?: number;
     far?: number;
     resolution: IVector2;
     cameraPosition?: IVector3;
@@ -45,6 +46,7 @@ export class Raymarcher implements IRaymarcher {
             epsilon: options.epsilon || Limitations.DEFAULT_EPSILON,
             far: options.far || Limitations.DEFAULT_FAR,
             maxIterations: options.maxIterations || Limitations.DEFAULT_MAX_ITERATIONS,
+            descentFactor: options.descentFactor || Limitations.DEFAULT_DESCENT_FACTOR,
         };
         this.scene = options.scene;
         this.camera = new Camera({
@@ -54,23 +56,25 @@ export class Raymarcher implements IRaymarcher {
         });
         this.lights = options.lights || [new GlobalLight([1, 1, 1, 1])];
         this.clear = options.clear || Color.BLACK;
-        this.epsilonYXX = {x: this.limitations.epsilon * 2, y: 0, z: 0};
-        this.epsilonXYX = {x: 0, y: this.limitations.epsilon * 2, z: 0};
-        this.epsilonXXY = {x: 0, y: 0, z: this.limitations.epsilon * 2};
+        this.epsilonYXX = {x: this.limitations.epsilon, y: 0, z: 0};
+        this.epsilonXYX = {x: 0, y: this.limitations.epsilon, z: 0};
+        this.epsilonXXY = {x: 0, y: 0, z: this.limitations.epsilon};
     }
 
     private calculateNormal(position: IVector3, distance: number): IVector3 {
-        return Vector3.normalize(Vector3.substract1({
+        const temp = Vector3.substract1({
             x: this.scene.distance(Vector3.add(position, this.epsilonYXX)).distance,
             y: this.scene.distance(Vector3.add(position, this.epsilonXYX)).distance,
             z: this.scene.distance(Vector3.add(position, this.epsilonXXY)).distance,
-        }, distance));
+        }, distance);
+        return Vector3.normalize(temp);
     }
 
     renderRay(ray: IRay, maxRecursions: number = 3): IColor {
         const hitData = ray.march(this.scene);
         if (hitData.hit) {
             const components: IColor[] = [];
+            let specularComponents: IColor[] = [];
             let normal = this.calculateNormal(hitData.position, hitData.intersection.distance);
             const surface = hitData.intersection.material.render(hitData.position, normal);
             if (surface.roughness) {
@@ -82,15 +86,20 @@ export class Raymarcher implements IRaymarcher {
                 normal = Vector3.normalize(Vector3.add(normal, randomOffset));
             }
             for (const light of this.lights) {
-                const component = light.getIllumination(hitData.position, normal);
+                const component = light.getIllumination(hitData.position, normal, ray.origin);
                 if (component) {
-                    components.push(component);
+                    components.push(component.diffuse);
+                    specularComponents.push(Color.pow(Color.clamp(component.specular), surface.specularFactor || 32));
+                    /*specular += Math.min(1, Math.pow(
+                        Math.max(0, component.specular),
+                        surface.specularFactor || 2
+                    ) * (surface.specularSpread || 0.2));*/
                 }
             }
-            let finalColor = Color.minBlend([surface.color, Color.additiveBlend(components)]);
+            let finalColor = Color.multiplyBlend([surface.color, Color.additiveBlend(components)]);
             if (surface.smoothness && maxRecursions > 0) {
                 const reflectionRay = new Ray({
-                    origin: Vector3.add(hitData.position, Vector3.scale(normal, this.limitations.epsilon * 2)),
+                    origin: Vector3.add(hitData.position, Vector3.scale(normal, this.limitations.epsilon)),
                     direction: Vector3.substract(
                         ray.direction,
                         Vector3.scale(normal, 2 * Vector3.dot(ray.direction, normal))
@@ -99,10 +108,13 @@ export class Raymarcher implements IRaymarcher {
                 });
                 const reflectionColor = this.renderRay(reflectionRay, maxRecursions - 1);
                 finalColor = Color.lerp(
-                    finalColor, Color.minBlend([finalColor, reflectionColor]), surface.smoothness,
+                    finalColor, Color.multiplyBlend([finalColor, reflectionColor]), surface.smoothness,
                 );
             }
-            return finalColor;
+            return Color.maxBlend([
+                finalColor,
+                Color.additiveBlend(specularComponents)
+            ]);
         } else {
             return this.clear;
         }

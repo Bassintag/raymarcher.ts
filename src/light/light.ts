@@ -1,5 +1,10 @@
 import {IColor, IVector3} from '../utils';
 
+export interface IIllumination {
+    diffuse: IColor;
+    specular: IColor;
+}
+
 export interface ILight {
 
     /*  readonly color: IColor;
@@ -8,5 +13,5 @@ export interface ILight {
 
       readonly radius: number; */
 
-    getIllumination(point: IVector3, normal: IVector3): IColor;
+    getIllumination(point: IVector3, normal: IVector3, view: IVector3): IIllumination;
 }

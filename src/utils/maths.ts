@@ -13,4 +13,12 @@ export namespace Maths {
     export function randomRange(min: number, max: number) {
         return Math.random() * (max - min) + min;
     }
+
+    export function clamp(n: number, min: number, max: number){
+        return Math.min(max, Math.max(min, n));
+    }
+
+    export const PI = 3.14159265359;
+    export const DEG2RAD = PI / 180;
+    export const RAD2DEG = 180 / PI;
 }

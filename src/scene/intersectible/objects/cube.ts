@@ -12,14 +12,12 @@ export class Cube extends SceneObject {
     }
 
     getDistance(position: IVector3): number {
-        return Vector3.norm(
-            Vector3.max1(
-                Vector3.substract(
-                    Vector3.abs(position),
-                    this.size,
-                ),
-                0,
-            )
+        const q = Vector3.substract(
+            Vector3.abs(position),
+            this.size,
         );
+        return Vector3.norm(
+            Vector3.max1(q, 0),
+        ) + Math.min(Math.max(q.x, Math.max(q.y, q.z)), 0);
     }
 }
